@@ -1,0 +1,13 @@
+<div class="ui segment">
+  <form {{action 'confirm' model on='submit'}} >
+    <div class="ui warning message">
+      <div class="header">
+        Are you sure?
+      </div>
+    </div>
+    <button type="submit" class="ui negative button">Delete</button>
+    {{#link-to 'addresses' }}
+      <button class="ui button secondary icon chevron left">Go Back</button>
+    {{/link-to}}
+  </form>
+</div>

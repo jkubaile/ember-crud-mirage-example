@@ -154,7 +154,7 @@ export default function() {
 </div>
 ```
 
-* Open the router file and change it to:
+* Open the route file and change it to:
 ```
 import Ember from 'ember';
 
@@ -166,6 +166,22 @@ export default Ember.Route.extend({
 ```
 
 * Head your browser to: http://localhost/addresses to see the result: 20 generated dummy entries in our address table.
+
+* We add an application template to insert a simple menu: `ember g template application`
+* with content:
+```
+<div class="ui segment">
+  <div class="ui menu">
+    <div class="header item">
+      {{#link-to "index"}}CRUD Tool{{/link-to}}
+    </div>
+
+    {{#link-to "addresses" class="item"}}Addresses{{/link-to}}
+  </div>
+</div>
+{{outlet}}
+```
+
 
 ## Step 5: create a form component
 
@@ -218,12 +234,11 @@ Cause the form to edit and add new address are the same we make a component out 
       <div class="ui segment">
         {{address-form model=model}}
       </div>
-      <button type="submit" class="ui button">Add address</button>
+      <button type="submit" class="ui primary button">Add address</button>
+      {{#link-to 'addresses' }}
+        <button class="ui button secondary"><i class="icon chevron left"></i>Go Back</button>
+      {{/link-to}}
     </form>
-
-    {{#link-to 'addresses' }}
-      <button class="ui button icon chevron left">Go Back</button>
-    {{/link-to}}
   </div>
 </div>
 ```
@@ -255,7 +270,7 @@ export default Ember.Route.extend({
 * To make navigation a little bit easier, add a "new" button below the table:
 ```
 {{#link-to 'addresses.new'}}
-  <button class="ui button">New address</button>
+  <button class="ui primary button">New address</button>
 {{/link-to}}
 ```
 
@@ -279,12 +294,11 @@ export default Ember.Route.extend({
       <div class="ui segment">
         {{address-form model=model}}
       </div>
-      <button type="submit" class="ui button">Save address</button>
+      <button type="submit" class="ui primary button">Change address</button>
+      {{#link-to 'addresses' }}
+        <button class="ui button secondary"><i class="icon chevron left"></i>Go Back</button>
+      {{/link-to}}
     </form>
-
-    {{#link-to 'addresses' }}
-      <button class="ui button icon chevron left">Go Back</button>
-    {{/link-to}}
   </div>
 </div>
 ```
@@ -306,5 +320,50 @@ export default Ember.Route.extend({
     }
   }
 
+});
+```
+
+## Step 9: deletion
+* create the route, we also specify the path here: `ember g route addresses/delete --path=:address_id/delete`
+* Add a link to the delete form from the table by changing extending the first name column:
+```
+...
+          <td>
+            {{#link-to 'addresses.edit' address.id}}
+              {{address.firstName}}
+            {{/link-to}}
+            {{#link-to 'addresses.delete' address.id}}
+              <i class="icon trash"></i>
+            {{/link-to}}
+          </td>
+...
+```
+* Change the delete template to:
+```
+<div class="ui segment">
+  <form {{action 'confirm' model on='submit'}} >
+    <div class="ui warning message">
+      <div class="header">
+        Are you sure?
+      </div>
+    </div>
+    <button type="submit" class="ui negative button">Delete</button>
+    {{#link-to 'addresses' }}
+      <button class="ui button secondary icon chevron left">Go Back</button>
+    {{/link-to}}
+  </form>
+</div>
+```
+* And the Route JS to:
+```
+import Ember from 'ember';
+
+export default Ember.Route.extend({
+  actions: {
+    confirm(record) {
+      record.destroyRecord()
+        .then(() => this.transitionTo('addresses'));
+    }
+  }
 });
 ```

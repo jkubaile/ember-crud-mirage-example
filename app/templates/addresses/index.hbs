@@ -14,6 +14,9 @@
             {{#link-to 'addresses.edit' address.id}}
               {{address.firstName}}
             {{/link-to}}
+            {{#link-to 'addresses.delete' address.id}}
+              <i class="icon trash"></i>
+            {{/link-to}}
           </td>
           <td>{{address.lastName}}</td>
           <td>{{address.street}}</td>
@@ -25,5 +28,5 @@
   </table>
 </div>
 {{#link-to 'addresses.new'}}
-  <button class="ui button">New address</button>
+  <button class="ui primary button">New address</button>
 {{/link-to}}

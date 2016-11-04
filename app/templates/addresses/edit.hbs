@@ -4,11 +4,10 @@
       <div class="ui segment">
         {{address-form model=model}}
       </div>
-      <button type="submit" class="ui button">Save address</button>
+      <button type="submit" class="ui primary button">Change address</button>
+      {{#link-to 'addresses' }}
+        <button class="ui button secondary"><i class="icon chevron left"></i>Go Back</button>
+      {{/link-to}}
     </form>
-
-    {{#link-to 'addresses' }}
-      <button class="ui button icon chevron left">Go Back</button>
-    {{/link-to}}
   </div>
 </div>

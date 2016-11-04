@@ -13,6 +13,10 @@ Router.map(function() {
     this.route('edit', {
       path: ':address_id/edit'
     });
+
+    this.route('delete', {
+      path: ':address_id/delete'
+    });
   });
 });
 
