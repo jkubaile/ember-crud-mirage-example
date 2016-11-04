@@ -127,7 +127,7 @@ export default function() {
 
 ## Step 4: Show all addresses
 
-* Create the ember route to display the addresses: `ember generate route addresses`.
+* Create the ember route to display the addresses: `ember generate route addresses/index`.
 * Open the hbs template and add:
 ```
 <div class="ui segment">
@@ -167,4 +167,91 @@ export default Ember.Route.extend({
 
 * Head your browser to: http://localhost/addresses to see the result: 20 generated dummy entries in our address table.
 
-## Step 5:
+## Step 5: create a form component
+
+Cause the form to edit and add new address are the same we make a component out of it:
+
+* `ember g component address-form`
+* Change the template content to:
+```
+<div class="field">
+  <label>First Name</label>
+  <div class="ui action input">
+    {{input value=model.firstName}}
+  </div>
+</div>
+<div class="field">
+  <label>Last Name</label>
+  <div class="ui action input">
+    {{input value=model.lastName}}
+  </div>
+</div>
+<div class="field">
+  <label>Street</label>
+  <div class="ui action input">
+    {{input value=model.street}}
+  </div>
+</div>
+<div class="field">
+  <label>City</label>
+  <div class="ui action input">
+    {{input value=model.city}}
+  </div>
+</div>
+<div class="field">
+  <label>Country</label>
+  <div class="ui action input">
+    {{input value=model.country}}
+  </div>
+</div>
+```
+
+
+## Step 6: create the route to add new addresses
+
+* `ember g route addresses/new`
+* Change the template to
+```
+<div class="ui grid form">
+  <div class="sixteen wide column">
+    <form {{action 'save' model on='submit'}} >
+      <div class="ui segment">
+        {{address-form model=model}}
+      </div>
+      <button type="submit" class="ui button">Add address</button>
+    </form>
+
+    {{#link-to 'addresses' }}
+      <button class="ui button icon chevron left">Go Back</button>
+    {{/link-to}}
+  </div>
+</div>
+```
+* And the JS of the route to:
+```
+import Ember from 'ember';
+
+export default Ember.Route.extend({
+  model() {
+    return this.get('store').createRecord('address');
+  },
+
+  actions: {
+    save(record) {
+      record.save()
+        .then(() => this.transitionTo('addresses'));
+    },
+
+    willTransition() {
+      this._super(...arguments);
+      const record = this.controller.get('model');
+      record.rollbackAttributes();
+    }
+  }
+
+});
+```
+* Now you can visit http://localhost:4200/addresses/new and add new entries. They will stay until you hit reload.
+
+
+Step 7: Add the edit route
