@@ -10,7 +10,11 @@
     <tbody>
       {{#each model as |address|}}
         <tr>
-          <td>{{address.firstName}}</td>
+          <td>
+            {{#link-to 'addresses.edit' address.id}}
+              {{address.firstName}}
+            {{/link-to}}
+          </td>
           <td>{{address.lastName}}</td>
           <td>{{address.street}}</td>
           <td>{{address.city}}</td>

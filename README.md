@@ -252,6 +252,59 @@ export default Ember.Route.extend({
 });
 ```
 * Now you can visit http://localhost:4200/addresses/new and add new entries. They will stay until you hit reload.
+* To make navigation a little bit easier, add a "new" button below the table:
+```
+{{#link-to 'addresses.new'}}
+  <button class="ui button">New address</button>
+{{/link-to}}
+```
 
+## Step 7: Add the edit route
+* create the route, we also specify the path here: `ember g route addresses/edit --path=:address_id/edit`
+* Add a link to the edit form from the table by changing extending the first name column:
+```
+...
+          <td>
+            {{#link-to 'addresses.edit' address.id}}
+              {{address.firstName}}
+            {{/link-to}}
+          </td>
+...
+```
+* Change the edit template to:
+```
+<div class="ui grid form">
+  <div class="sixteen wide column">
+    <form {{action 'save' model on='submit'}} >
+      <div class="ui segment">
+        {{address-form model=model}}
+      </div>
+      <button type="submit" class="ui button">Save address</button>
+    </form>
 
-Step 7: Add the edit route
+    {{#link-to 'addresses' }}
+      <button class="ui button icon chevron left">Go Back</button>
+    {{/link-to}}
+  </div>
+</div>
+```
+* And the Route JS to:
+```
+import Ember from 'ember';
+
+export default Ember.Route.extend({
+  actions: {
+    save(record) {
+      record.save()
+        .then(() => this.transitionTo('addresses'));
+    },
+
+    willTransition() {
+      this._super(...arguments);
+      const record = this.controller.get('model');
+      record.rollbackAttributes();
+    }
+  }
+
+});
+```
