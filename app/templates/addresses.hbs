@@ -1,0 +1,22 @@
+<div class="ui segment">
+  <table class="ui table">
+    <thead>
+      <th>First Name</th>
+      <th>Last Name</th>
+      <th>Street</th>
+      <th>City</th>
+      <th>Coutnry</th>
+    </thead>
+    <tbody>
+      {{#each model as |address|}}
+        <tr>
+          <td>{{address.firstName}}</td>
+          <td>{{address.lastName}}</td>
+          <td>{{address.street}}</td>
+          <td>{{address.city}}</td>
+          <td>{{address.country}}</td>
+        </tr>
+      {{/each}}
+    </tbody>
+  </table>
+</div>

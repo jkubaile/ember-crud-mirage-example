@@ -62,10 +62,109 @@ just follow the steps below.
 
 ## Step 2: define the model
 
-We are going to build a small addressbook. So we need something like an address. Cause ember models are pluralized,
-the model is called `addresses`.
+We are going to build a small addressbook. So we need something like an address.
 
-* Create the ember model: `ember generate model addresses` - this is for your ember frontend code.
-* Create the mirage model: `ember generate mirage-model addresses` - this for mirage, knowing your model.
-* Create the mirage factory: `ember generate mirage-factory addresses` - so we can generate demo data with mirage factories.
+* Create the ember model: `ember generate model address` - this is for your ember frontend code.
+* Create the mirage model: `ember generate mirage-model address` - this for mirage, knowing your model.
+* Create the mirage factory: `ember generate mirage-factory address` - so we can generate demo data with mirage factories.
+* Model the model - open app/models/address.js and change it to:
+```
+import DS from 'ember-data';
+
+export default DS.Model.extend({
+  firstName: DS.attr('string'),
+  lastName: DS.attr('string'),
+  street: DS.attr('string'),
+  city: DS.attr('string'),
+  country: DS.attr('string')
+});
+
+```
+
+## Step 3: Prepare mirage for addresses.
+
+* Open mirage/factories/address.js and change it to:
+```
+import { Factory, faker } from 'ember-cli-mirage';
+
+export default Factory.extend({
+  firstName() {
+    return faker.name.firstName();
+  },
+  lastName() {
+    return faker.name.lastName();
+  },
+  street() {
+    return faker.address.streetAddress();
+  },
+  city() {
+    return faker.address.city();
+  },
+  country() {
+    return faker.address.country();
+  }
+});
+```
+We are using the fine faker lib to generate some random data. Alternativly you can just enter statics values.
+
+* Next, change the default scenario in mirage/scenarios/default.js to:
+```
+export default function(server) {
+  server.createList('address', 20);
+}
+```
+So mirage generates 20 address entries for us with the given factory settings.
+
+* Last, we need to define the routes, needed for the CRUD stuff to work. Open mirage/config.js and change it to:
+```
+export default function() {
+  this.get('/addresses');
+  this.get('/addresses/:id');
+  this.post('/addresses');
+  this.del('/addresses/:id');
+  this.patch('/addresses/:id');
+```
+
+## Step 4: Show all addresses
+
 * Create the ember route to display the addresses: `ember generate route addresses`.
+* Open the hbs template and add:
+```
+<div class="ui segment">
+  <table class="ui table">
+    <thead>
+      <th>First Name</th>
+      <th>Last Name</th>
+      <th>Street</th>
+      <th>City</th>
+      <th>Coutnry</th>
+    </thead>
+    <tbody>
+      {{#each model as |address|}}
+        <tr>
+          <td>{{address.firstName}}</td>
+          <td>{{address.lastName}}</td>
+          <td>{{address.street}}</td>
+          <td>{{address.city}}</td>
+          <td>{{address.country}}</td>
+        </tr>
+      {{/each}}
+    </tbody>
+  </table>
+</div>
+```
+
+* Open the router file and change it to:
+```
+import Ember from 'ember';
+
+export default Ember.Route.extend({
+  model() {
+    return this.get('store').findAll('address');
+  }
+});
+```
+
+* Head your browser to: http://localhost/addresses to see the result: 20 generated dummy entries in our address table.
+
+## Step 5:
