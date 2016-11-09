@@ -1,11 +1,17 @@
-<div class="ui segment">
+<div class="ui center aligned segment">
+  {{#link-to 'addresses.new'}}
+  <button class="ui primary icon button">
+    <i class="icon plus"></i> New address
+  </button>
+  {{/link-to}}
   <table class="ui table">
     <thead>
       <th>First Name</th>
       <th>Last Name</th>
       <th>Street</th>
       <th>City</th>
-      <th>Coutnry</th>
+      <th>Country</th>
+      <th></th>
     </thead>
     <tbody>
       {{#each model as |address|}}
@@ -14,19 +20,18 @@
             {{#link-to 'addresses.edit' address.id}}
               {{address.firstName}}
             {{/link-to}}
-            {{#link-to 'addresses.delete' address.id}}
-              <i class="icon trash"></i>
-            {{/link-to}}
           </td>
           <td>{{address.lastName}}</td>
           <td>{{address.street}}</td>
           <td>{{address.city}}</td>
           <td>{{address.country}}</td>
+          <td>
+            {{#link-to 'addresses.delete' address.id class="ui mini negative icon button"}}
+              <i class="icon trash"></i>
+            {{/link-to}}
+          </td>
         </tr>
       {{/each}}
     </tbody>
   </table>
 </div>
-{{#link-to 'addresses.new'}}
-  <button class="ui primary button">New address</button>
-{{/link-to}}

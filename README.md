@@ -68,7 +68,7 @@ We are going to build a small addressbook. So we need something like an address.
 * Create the mirage model: `ember generate mirage-model address` - this for mirage, knowing your model.
 * Create the mirage factory: `ember generate mirage-factory address` - so we can generate demo data with mirage factories.
 * Model the model - open app/models/address.js and change it to:
-```
+```js
 import DS from 'ember-data';
 
 export default DS.Model.extend({
@@ -84,7 +84,7 @@ export default DS.Model.extend({
 ## Step 3: Prepare mirage for addresses.
 
 * Open mirage/factories/address.js and change it to:
-```
+```js
 import { Factory, faker } from 'ember-cli-mirage';
 
 export default Factory.extend({
@@ -108,7 +108,7 @@ export default Factory.extend({
 We are using the fine faker lib to generate some random data. Alternativly you can just enter statics values.
 
 * Next, change the default scenario in mirage/scenarios/default.js to:
-```
+```js
 export default function(server) {
   server.createList('address', 20);
 }
@@ -116,7 +116,7 @@ export default function(server) {
 So mirage generates 20 address entries for us with the given factory settings.
 
 * Last, we need to define the routes, needed for the CRUD stuff to work. Open mirage/config.js and change it to:
-```
+```js
 export default function() {
   this.get('/addresses');
   this.get('/addresses/:id');
@@ -129,7 +129,7 @@ export default function() {
 
 * Create the ember route to display the addresses: `ember generate route addresses/index`.
 * Open the hbs template and add:
-```
+```html
 <div class="ui segment">
   <table class="ui table">
     <thead>
@@ -155,7 +155,7 @@ export default function() {
 ```
 
 * Open the route file and change it to:
-```
+```js
 import Ember from 'ember';
 
 export default Ember.Route.extend({
@@ -169,7 +169,7 @@ export default Ember.Route.extend({
 
 * We add an application template to insert a simple menu: `ember g template application`
 * with content:
-```
+```html
 <div class="ui segment">
   <div class="ui menu">
     <div class="header item">
@@ -189,7 +189,7 @@ Cause the form to edit and add new address are the same we make a component out 
 
 * `ember g component address-form`
 * Change the template content to:
-```
+```html
 <div class="field">
   <label>First Name</label>
   <div class="ui action input">
@@ -227,7 +227,7 @@ Cause the form to edit and add new address are the same we make a component out 
 
 * `ember g route addresses/new`
 * Change the template to
-```
+```html
 <div class="ui grid form">
   <div class="sixteen wide column">
     <form {{action 'save' model on='submit'}} >
@@ -243,7 +243,7 @@ Cause the form to edit and add new address are the same we make a component out 
 </div>
 ```
 * And the JS of the route to:
-```
+```js
 import Ember from 'ember';
 
 export default Ember.Route.extend({
@@ -268,7 +268,7 @@ export default Ember.Route.extend({
 ```
 * Now you can visit http://localhost:4200/addresses/new and add new entries. They will stay until you hit reload.
 * To make navigation a little bit easier, add a "new" button below the table:
-```
+```html
 {{#link-to 'addresses.new'}}
   <button class="ui primary button">New address</button>
 {{/link-to}}
@@ -277,7 +277,7 @@ export default Ember.Route.extend({
 ## Step 7: Add the edit route
 * create the route, we also specify the path here: `ember g route addresses/edit --path=:address_id/edit`
 * Add a link to the edit form from the table by changing extending the first name column:
-```
+```html
 ...
           <td>
             {{#link-to 'addresses.edit' address.id}}
@@ -287,7 +287,7 @@ export default Ember.Route.extend({
 ...
 ```
 * Change the edit template to:
-```
+```html
 <div class="ui grid form">
   <div class="sixteen wide column">
     <form {{action 'save' model on='submit'}} >
@@ -303,7 +303,7 @@ export default Ember.Route.extend({
 </div>
 ```
 * And the Route JS to:
-```
+```js
 import Ember from 'ember';
 
 export default Ember.Route.extend({
@@ -326,7 +326,7 @@ export default Ember.Route.extend({
 ## Step 9: deletion
 * create the route, we also specify the path here: `ember g route addresses/delete --path=:address_id/delete`
 * Add a link to the delete form from the table by changing extending the first name column:
-```
+```html
 ...
           <td>
             {{#link-to 'addresses.edit' address.id}}
@@ -339,7 +339,7 @@ export default Ember.Route.extend({
 ...
 ```
 * Change the delete template to:
-```
+```html
 <div class="ui segment">
   <form {{action 'confirm' model on='submit'}} >
     <div class="ui warning message">
@@ -355,7 +355,7 @@ export default Ember.Route.extend({
 </div>
 ```
 * And the Route JS to:
-```
+```js
 import Ember from 'ember';
 
 export default Ember.Route.extend({

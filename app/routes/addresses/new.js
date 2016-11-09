@@ -17,5 +17,4 @@ export default Ember.Route.extend({
       record.rollbackAttributes();
     }
   }
-
 });
